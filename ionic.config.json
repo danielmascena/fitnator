@@ -1,0 +1,7 @@
+{
+  "name": "zest-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
