@@ -13,10 +13,27 @@ export default {
             type: Number,
             required: true
         },
+        paused: {
+            type: Boolean
+        }
     },
     data() {
         return {
-            countdown: this.time
+            countdown: this.time,
+            isPaused: this.paused
+        }
+    },
+    watch: {
+        isPaused: function (value) {
+            console.log('isPaused',value);
+            if (value) {
+                this.removeCount();
+            }
+        },
+        countdown: function(value) {
+            if (value === 0) {
+                this.removeCount();
+            }
         }
     },
     computed: {
@@ -27,16 +44,22 @@ export default {
     methods: {
         pauseCountdown() {
             this.$emit('pause');
-        }
-    },
-    created() {
-        this.intervalId = setInterval(() => {
+        },
+        startCount() {
+            this.intervalId = setInterval(() => {
             this.countdown -= 1;
             if (this.countdown === 0) this.$emit('finish');
         }, 1000);
+        },
+        removeCount() {
+            clearInterval(this.intervalId);
+        }
+    },
+    created() {
+        this.startCount();
     },
     unmounted() {
-        clearInterval(this.intervalId);
+        this.removeCount()
     }
 };
 </script>

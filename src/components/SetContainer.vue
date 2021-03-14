@@ -1,17 +1,17 @@
 <template>
     <section>
-        <h1>Round 1</h1>
-        <interval-container></interval-container>
+        <h1>Set 1</h1>
+        <app-round exercise="Push Ups"></app-round>
     </section>
 </template>
 
 <script>
-import IntervalContainer from './IntervalContainer';
+import AppRound from './AppRound';
 
 export default {
     name: 'SetContainer',
     components: {
-        IntervalContainer
+        AppRound
     }
 }
 </script>

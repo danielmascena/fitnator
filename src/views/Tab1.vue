@@ -12,17 +12,17 @@
         </ion-toolbar>
       </ion-header>
     
-      <SetContainer name="Tab 1 page" />
+      <CircuitTimer name="Tab 1 page" />
     </ion-content>
   </ion-page>
 </template>
 
 <script>
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-import SetContainer from '@/components/SetContainer.vue';
+import CircuitTimer from '@/components/CircuitTimer.vue';
 
 export default  {
   name: 'Tab1',
-  components: { SetContainer, IonHeader, IonToolbar, IonTitle, IonContent, IonPage }
+  components: { CircuitTimer, IonHeader, IonToolbar, IonTitle, IonContent, IonPage }
 }
 </script>
