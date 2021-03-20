@@ -1,6 +1,7 @@
 <template>
     <div class="app-countdown-container" @click="pauseCountdown()">
         <time class="app-countdown" :datetime="countdown" :class="{ending: isEnding}">{{countdown}}</time>
+        <button ref="start" id="btn-start" @click="start">Start</button>
     </div>
 </template>
 
@@ -14,6 +15,9 @@ export default {
             required: true
         },
         paused: {
+            type: Boolean
+        },
+        isOnTheFloor: {
             type: Boolean
         }
     },
@@ -38,7 +42,7 @@ export default {
     },
     computed: {
         isEnding() {
-            return this.countdown <= 5
+            return this.countdown <= 5;
         }
     },
     methods: {
@@ -47,16 +51,31 @@ export default {
         },
         startCount() {
             this.intervalId = setInterval(() => {
-            this.countdown -= 1;
-            if (this.countdown === 0) this.$emit('finish');
-        }, 1000);
+                this.countdown -= 1;
+                if (this.countdown === 0) this.$emit('finish');
+            }, 1000);
         },
         removeCount() {
+            
+            this.speak(this.countdown);
             clearInterval(this.intervalId);
+        },
+        start(){
+            this.speak('Get ready?');
+        },
+        speak(txt) {
+            const voices = this.synth.getVoices();
+            const utterThis = new SpeechSynthesisUtterance(txt);
+            utterThis.voice = voices[0];
+            utterThis.pitch = 1;
+            utterThis.rate = 1;
+            this.synth.speak(utterThis);
         }
     },
     created() {
         this.startCount();
+        this.synth = window.speechSynthesis;
+        console.log(this.synth);
     },
     unmounted() {
         this.removeCount()
