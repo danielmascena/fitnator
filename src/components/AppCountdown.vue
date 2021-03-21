@@ -34,7 +34,10 @@ export default {
                 this.removeCount();
             }
         },
-        countdown: function(value) {
+        countdown: function(value, oldVal) {
+            if (oldVal <= 6) {
+                this.speak(value);
+            }
             if (value === 0) {
                 this.removeCount();
             }
@@ -56,7 +59,7 @@ export default {
             }, 1000);
         },
         removeCount() {
-            
+
             this.speak(this.countdown);
             clearInterval(this.intervalId);
         },
@@ -75,7 +78,6 @@ export default {
     created() {
         this.startCount();
         this.synth = window.speechSynthesis;
-        console.log(this.synth);
     },
     unmounted() {
         this.removeCount()

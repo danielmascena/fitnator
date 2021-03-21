@@ -16,3 +16,9 @@ export default defineComponent({
   }
 });
 </script>
+
+<style>
+#app {
+  --ion-text-color: yellow;
+}
+</style>

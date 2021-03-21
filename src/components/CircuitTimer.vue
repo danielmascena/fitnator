@@ -7,6 +7,7 @@
             </span>
             <span v-else><AppIconMusicOn /></span>
         </div>
+        <AppStartButton />
         <set-container></set-container>
         <audio ref="audio">
             <source :src="soundtrack" type="audio/mpeg">
@@ -16,6 +17,7 @@
 
 <script>
 import SetContainer from './SetContainer';
+import AppStartButton from './AppStartButton';
 import AppIconMusicOn from './AppIconMusicOn';
 import AppIconMusicOff from './AppIconMusicOff';
 
@@ -23,6 +25,7 @@ export default {
     name: "CircuitTimer",
     components: {
         SetContainer,
+        AppStartButton,
         AppIconMusicOn,
         AppIconMusicOff
     },
