@@ -24,7 +24,7 @@ export default {
 }
 
 .str-btn-container {
-    box-shadow: 0 0 4px whitesmoke;
+    box-shadow: 0 0 4px var(--ion-text-color);
     width: 100px;
     height: 100px;
     border-radius: 50%;
@@ -36,5 +36,6 @@ export default {
     background: none;
     outline: none;
     color: var(--ion-text-color);
+    font-size: 150%;
 }
 </style>

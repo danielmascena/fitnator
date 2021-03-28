@@ -1,10 +1,10 @@
 <template>
     <article>
-        <h1>{{this.exercise}}</h1>
-        <section v-for="(numOfTimes, index) of repeatedTimes" :key="index">
+        <h1>{{exercise.name}}</h1>
+        <section v-for="(numOfTimes, index) of exercise.times" :key="index">
             <h2>Round {{index + 1}}</h2>
-            <app-action :time="45" :paused="actionIsPaused" @pause="pauseTheCountdown()"></app-action>
-            <app-interval :time="15" :paused="intervalIsPaused"></app-interval>
+            <app-action :time="exercise.work" :paused="actionIsPaused" @pause="pauseTheCountdown()"></app-action>
+            <app-interval :time="exercise.rest" :paused="intervalIsPaused"></app-interval>
         </section>
     </article>
 </template>
@@ -12,6 +12,8 @@
 <script>
 import AppAction from './AppAction';
 import AppInterval from './AppInterval';
+
+import Round from '../Round';
 
 export default {
     name: 'RoundTimer',
@@ -21,7 +23,7 @@ export default {
     },
     props: {
         exercise: {
-            type: String,
+            type: Round,
             required: true
         },
         repeat: {

@@ -1,17 +1,28 @@
 <template>
     <section>
         <h1>Set 1</h1>
-        <app-round exercise="Push Ups"></app-round>
+	<ListAppRound :workout="convertedWorkout" />
     </section>
 </template>
 
 <script>
-import AppRound from './AppRound';
+import ListAppRound from './ListAppRound';
+import Round from '../Round';
 
 export default {
     name: 'SetContainer',
     components: {
-        AppRound
+	ListAppRound
+    },
+    props: {
+	workout: {
+          type: Array
+	}
+    },
+    computed: {
+      convertedWorkout() {
+        return this.workout.map(w => Reflect.constructor.call(Round, {...w}));
+      } 
     }
 }
 </script>

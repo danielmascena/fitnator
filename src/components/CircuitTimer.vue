@@ -8,7 +8,7 @@
             <span v-else><AppIconMusicOn /></span>
         </div>
         <AppStartButton />
-        <set-container></set-container>
+        <SetContainer :workout="initialData" />
         <audio ref="audio">
             <source :src="soundtrack" type="audio/mpeg">
         </audio>
@@ -20,6 +20,8 @@ import SetContainer from './SetContainer';
 import AppStartButton from './AppStartButton';
 import AppIconMusicOn from './AppIconMusicOn';
 import AppIconMusicOff from './AppIconMusicOff';
+
+import data from '../data.json';
 
 export default {
     name: "CircuitTimer",
@@ -37,8 +39,9 @@ export default {
     },
     data() {
         return {
-            soundtrack: '/assets/soundtrack/XTaKeRuX-Shinigami.mp3',
-            musicOn: this.autoplay
+		soundtrack: '/assets/soundtrack/XTaKeRuX-Shinigami.mp3',
+		musicOn: this.autoplay,
+		initialData: data
         }
     },
     methods: {
@@ -60,6 +63,7 @@ export default {
     },
     mounted() {
         if (this.autoplay) this.playMusic();
+	console.log('%cData: ', 'font-size: 200%;color: green', data);
     }
 }
 </script>
