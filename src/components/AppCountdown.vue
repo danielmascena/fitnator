@@ -40,6 +40,7 @@ export default {
             }
             if (value === 0) {
                 this.removeCount();
+		this.$emit('terminated');
             }
         }
     },
