@@ -104,9 +104,6 @@ export default {
         }
         this.synth = window.speechSynthesis;
     },
-    updated() {
-        console.log('%cupdated', 'font-size: 200%');
-    },
     unmounted() {
         this.removeCount()
     }

@@ -4,6 +4,7 @@
             <AppRound v-for="(work, index) in workout" 
                 :key="index" 
                 :exercise="work" 
+                :display="isActive(index)"
                 @finish="goToNext()" 
                 v-show="isActive(index)" 
             />

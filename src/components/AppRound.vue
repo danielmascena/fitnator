@@ -1,23 +1,25 @@
 <template>
-    <article>
+    <article v-if="display">
         <h1>{{exercise.name}}</h1>
-        <section v-for="round in exercise.times" :key="round">
-            <div v-show="isCurrentRound(round)">
+        <section 
+            v-for="round in exercise.times" 
+            v-show="isCurrentRound(round)"
+            :key="round">
                 <h2>Round {{round}}</h2>
-                <AppCountdown v-if="isActionCounting" 
-                    :time="exercise.work" 
+                <AppCountdown 
+                    v-if="isActionCounting" 
                     title="Work"
+                    :time="exercise.work" 
                     :paused="!isCurrentRound(round)" 
-                    @pause="pauseTheCountdown()" 
                     @finish="actionFinished()" 
                 />
-                <AppCountdown v-else 
-                    :time="exercise.rest" 
+                <AppCountdown 
+                    v-else 
                     title="Rest"
-                    :pause="!isCurrentRound(round)" 
+                    :time="exercise.rest" 
+                    :paused="!isCurrentRound(round)" 
                     @finish="restFinished()" 
                 />
-            </div>
         </section>
     </article>
 </template>
@@ -36,6 +38,9 @@ export default {
             type: Round,
             required: true
         },
+        display: {
+            type: Boolean
+        }
     },
     data() {
         return {
@@ -45,7 +50,7 @@ export default {
     },
     watch: {
         position(value) {
-            if (value === this.exercise.times) {
+            if (value > this.exercise.times) {
                 console.log('all round finished');
                 this.$emit('finish');
             }
@@ -58,6 +63,7 @@ export default {
         restFinished(){
             console.log('%crest finished', 'color: blue; font-size: 150%');
             this.position += 1;
+            this.isActionCounting = true;
         },
         isCurrentRound(round){
             return round === this.position;

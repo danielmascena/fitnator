@@ -1,7 +1,7 @@
 <template>
     <section>
         <h1>Set 1</h1>
-	<ListAppRound :workout="convertedWorkout" />
+        <ListAppRound :workout="convertedWorkout" />
     </section>
 </template>
 
@@ -12,17 +12,17 @@ import Round from '../Round';
 export default {
     name: 'SetContainer',
     components: {
-	ListAppRound
+        ListAppRound
     },
     props: {
-	workout: {
-          type: Array
-	}
+        workout: {
+            type: Array
+        }
     },
     computed: {
-      convertedWorkout() {
-        return this.workout.map(w => Reflect.constructor.call(Round, {...w}));
-      } 
+        convertedWorkout() {
+            return this.workout.map(w => Reflect.constructor.call(Round, {...w}));
+        } 
     }
 }
 </script>
