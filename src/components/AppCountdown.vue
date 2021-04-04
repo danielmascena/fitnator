@@ -1,8 +1,19 @@
 <template>
-    <div class="app-countdown-container" @click="pauseCountdown()">
-        <time class="app-countdown" :datetime="countdown" :class="{ending: isEnding}">{{countdown}}</time>
-        <button ref="start" id="btn-start" @click="start">Start</button>
-    </div>
+    <section 
+        class="app-countdown-container" 
+        @click="pauseCountdown()">
+            <h2>{{title}}</h2>
+            <time class="app-countdown" 
+                :datetime="countdown" 
+                :class="{ending: isEnding}">
+                    {{countdown}}
+            </time>
+            <button 
+                @click="toggleCount()" 
+                class="action-btn">
+                    {{countStatus}}
+            </button>
+    </section>
 </template>
 
 <script>
@@ -14,17 +25,22 @@ export default {
             type: Number,
             required: true
         },
-        paused: {
-            type: Boolean
+        title: {
+            type: String
         },
-        isOnTheFloor: {
+        paused: {
+            type: Boolean,
+            default: false
+        },
+        isLayDown: {
             type: Boolean
         }
     },
     data() {
         return {
             countdown: this.time,
-            isPaused: this.paused
+            isPaused: this.paused,
+            finished: false,
         }
     },
     watch: {
@@ -37,35 +53,41 @@ export default {
         countdown: function(value, oldVal) {
             if (oldVal <= 6) {
                 this.speak(value);
-            }
-            if (value === 0) {
-                this.removeCount();
-		this.$emit('terminated');
+
+                if (value === 0) {
+                    this.removeCount();
+                    this.finished = true;
+                    this.$emit('finish');
+                }
             }
         }
     },
     computed: {
         isEnding() {
             return this.countdown <= 5;
+        },
+        countStatus() {
+            return this.isPaused ? "resume" : "pause";
         }
     },
     methods: {
-        pauseCountdown() {
-            this.$emit('pause');
-        },
         startCount() {
             this.intervalId = setInterval(() => {
                 this.countdown -= 1;
-                if (this.countdown === 0) this.$emit('finish');
             }, 1000);
         },
         removeCount() {
-
-            this.speak(this.countdown);
             clearInterval(this.intervalId);
         },
-        start(){
-            this.speak('Get ready?');
+        toggleCount(){
+            if (this.isPaused){
+                this.startCount();
+                this.$emit('resumed');
+            } else {
+                this.removeCount();
+                this.$emit('paused');
+            }
+            this.isPaused = !this.isPaused;
         },
         speak(txt) {
             const voices = this.synth.getVoices();
@@ -77,8 +99,13 @@ export default {
         }
     },
     created() {
-        this.startCount();
+        if (!this.paused) {
+            this.startCount();
+        }
         this.synth = window.speechSynthesis;
+    },
+    updated() {
+        console.log('%cupdated', 'font-size: 200%');
     },
     unmounted() {
         this.removeCount()
@@ -104,5 +131,8 @@ export default {
     }
     .ending {
         color: red;
+    }
+    .action-btn {
+        text-transform: Capitalize;
     }
 </style>

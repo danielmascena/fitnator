@@ -1,14 +1,14 @@
 [
 	{
 		"name": "push-ups",
-		"work": 45,
-		"rest": 15,
-		"times": 1
+		"work": 9,
+		"rest": 6,
+		"times": 2
 	},
 	{
 		"name": "Jumping Jacks",
-		"work": 45,
-		"rest": 15,
+		"work": 60,
+		"rest": 30,
 		"times": 1
 	}
 ]

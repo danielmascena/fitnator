@@ -10,7 +10,9 @@
         <AppStartButton />
         <SetContainer :workout="initialData" />
         <audio ref="audio">
-            <source :src="soundtrack" type="audio/mpeg">
+            <source 
+                :src="soundtrack" 
+                type="audio/mpeg" />
         </audio>
     </section>
 </template>
@@ -67,3 +69,10 @@ export default {
     }
 }
 </script>
+
+<style>
+section{
+    background-color: #000;
+    --ion-text-color: yellow;
+    }
+</style>
