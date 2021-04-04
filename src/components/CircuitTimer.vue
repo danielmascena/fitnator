@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section :class="$style.container">
         <h1>Workout</h1>
         <div @click="toggleMusic()">
             <span v-if="musicOn">
@@ -7,7 +7,7 @@
             </span>
             <span v-else><AppIconMusicOn /></span>
         </div>
-        <AppStartButton />
+        <AppButton />
         <SetContainer :workout="initialData" />
         <audio ref="audio">
             <source 
@@ -19,7 +19,7 @@
 
 <script>
 import SetContainer from './SetContainer';
-import AppStartButton from './AppStartButton';
+import AppButton from './AppButton';
 import AppIconMusicOn from './AppIconMusicOn';
 import AppIconMusicOff from './AppIconMusicOff';
 
@@ -29,7 +29,7 @@ export default {
     name: "CircuitTimer",
     components: {
         SetContainer,
-        AppStartButton,
+        AppButton,
         AppIconMusicOn,
         AppIconMusicOff
     },
@@ -41,9 +41,9 @@ export default {
     },
     data() {
         return {
-		soundtrack: '/assets/soundtrack/XTaKeRuX-Shinigami.mp3',
-		musicOn: this.autoplay,
-		initialData: data
+            soundtrack: '/assets/soundtrack/XTaKeRuX-Shinigami.mp3',
+            musicOn: this.autoplay,
+            initialData: data
         }
     },
     methods: {
@@ -59,20 +59,27 @@ export default {
     },
     watch: {
         musicOn: function(value) {
-            if (!value) this.pauseMusic();
-            if (value) this.playMusic();
+            if (!value){
+                this.pauseMusic();
+            }
+            if (value){
+                this.playMusic();
+            }
         }
     },
     mounted() {
-        if (this.autoplay) this.playMusic();
-	console.log('%cData: ', 'font-size: 200%;color: green', data);
+        if (this.autoplay) {
+            this.playMusic();
+        }
+        console.log('%cData: ', 'font-size: 200%;color: green', data);
     }
 }
 </script>
 
-<style>
-section{
+<style module>
+.container :global {
     background-color: #000;
     --ion-text-color: yellow;
-    }
+    height: 100%;
+}
 </style>

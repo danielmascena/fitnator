@@ -52,12 +52,12 @@ export default {
         },
         countdown: function(value, oldVal) {
             if (oldVal <= 6) {
-                this.speak(value);
-
                 if (value === 0) {
                     this.removeCount();
                     this.finished = true;
                     this.$emit('finish');
+                } else {
+                    this.speak(value);
                 }
             }
         }
