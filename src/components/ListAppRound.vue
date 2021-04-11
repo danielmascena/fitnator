@@ -30,7 +30,8 @@ export default {
     },
     data() {
         return {
-            position: 0
+            position: 0,
+            iterator: this.workout.values()
         }
     },
     methods: {
