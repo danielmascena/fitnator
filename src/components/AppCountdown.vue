@@ -20,36 +20,36 @@
         <h2>{{title}}</h2>
         <svg 
             xmlns="http://www.w3.org/2000/svg"
-            class="circle-chart" 
-            viewbox="0 0 180 180" 
-            width="180" 
-            height="180">
+            class="circle-container" 
+            :height="radius * 2"
+            :width="radius * 2">
             <circle 
-                class="circle-chart__background" 
+                class="circle-background" 
                 stroke="#efefef" 
-                stroke-width="10" 
+                :stroke-width="stroke" 
                 fill="none" 
-                cx="90" 
-                cy="90" 
-                r="85" />
+                :cx="radius"
+                :cy="radius"
+                :r="normalizedRadius" />
      
             <circle 
-                class="circle-chart__circle circle-chart__circle-progress" 
+                class="circle-progress" 
                 stroke="#00acc1" 
-                stroke-width="10" 
+                :stroke-width="stroke" 
                 fill="none" 
-                cx="90" 
-                cy="90" 
-                r="85" 
-                :stroke-dasharray="dashArray" 
+                :cx="radius"
+                :cy="radius"
+                :r="normalizedRadius" 
+                :stroke-dasharray="circumference + ' ' + circumference" 
+                :stroke-dashoffset="strokeDashoffset"
                 stroke-linecap="round"
                 ref="progress" />
 
-            <g class="circle-chart__info">
+            <g class="circle-info">
                 <text 
                     class="circle-chart__percent " 
-                    x="90" 
-                    y="110" 
+                    :x="radius" 
+                    :y="radius" 
                     alignment-baseline="central" 
                     text-anchor="middle" 
                     font-size="54" 
@@ -75,26 +75,33 @@ export default {
             type: Number,
             required: true
         },
-        title: {
-            type: String
+        radius: {
+            type: Number,
+            default: 60
         },
+        stroke: {
+            type: Number,
+            default: 4
+        },
+        title: String,
         paused: {
             type: Boolean,
             default: false
         },
-        isLayDown: {
-            type: Boolean
-        }
+        isLayDown: Boolean,
     },
     data() {
+        const normalizedRadius = this.radius - this.stroke * 2;
+        const circumference = normalizedRadius * 2 * Math.PI;
+    
         return {
             countdown: this.time,
             isPaused: this.paused,
-            finished: false,
-            oneQuarterTime: this.time * .25,
-            oneQuarterDash: ((534 / 100) * .25) * 100 >>> 0,
             dashArrayValue: 0,
-            progressCount: 1
+            progress: 0,
+            tenPercentage: this.time / 10,
+            normalizedRadius,
+            circumference
         }
     },
     watch: {
@@ -105,22 +112,13 @@ export default {
         },
         countdown: function(value, oldValue) {
 
-            if (oldValue === (this.time - (this.progressCount * this.oneQuarterTime) >>> 0)) {
-                this.dashArrayValue = this.oneQuarterDash * this.progressCount;
-                this.progressCount += 1;
-                this.$refs.progress.style.animation = 'none';
-                this.$refs.progress.offsetWidth;
-                this.$refs.progress.style.animation = 'circle-chart-fill 2s reverse';
-                this.$refs.progress.classList.add('circle-chart__circle-progress');
-                console.log(this.$refs.progress.classList);
-            }
-            this.$refs.progress.classList.remove('circle-chart__circle-progress');
-
             if (oldValue <= 6) {
                 if (value === 0) {
-                    this.removeCount();
-                    this.finished = true;
-                    this.$emit('finish');
+                    setTimeout(() => {
+                        this.removeCount();
+                        this.$emit('finish');
+                    }, 500);
+                    return;
                 } else {
                     this.speak(value);
                 }
@@ -128,24 +126,29 @@ export default {
         }
     },
     computed: {
+        strokeDashoffset() {
+            return this.circumference - this.progress / 100 * this.circumference;
+        },
         currentColor() {
             return this.countdown <= 5 ? 'red' : 'yellow';
         },
         countStatus() {
             return this.isPaused ? "resume" : "pause";
         },
-        dashArray() {
-            return this.dashArrayValue + ", 534";
-        }
     },
     methods: {
         startCount() {
-            this.intervalId = setInterval(() => {
-                this.countdown -= 1;
-            }, 1000);
+            this.intervalCountdown = setInterval(() => 
+                this.countdown -= 1
+            , 1000);
+
+            this.intervalProgress = setInterval(() => 
+                this.progress += 10
+            , this.tenPercentage * 1000);
         },
         removeCount() {
-            clearInterval(this.intervalId);
+            clearInterval(this.intervalCountdown);
+            clearInterval(this.intervalProgress);
         },
         toggleCount(){
             if (this.isPaused){
@@ -165,10 +168,6 @@ export default {
             utterThis.rate = 1;
             this.synth.speak(utterThis);
         },
-        restart(el, done) {
-            console.log('animation is ', done);
-            el.style.animationPlayState = 'running';
-        }
     },
     created() {
         if (!this.paused) {
@@ -206,26 +205,18 @@ export default {
     .action-btn {
         text-transform: Capitalize;
     }
-
-    .circle-chart__circle {
-        transform: rotate(-90deg); /* 2, 3 */
-        transform-origin: center; /* 4 */
+    .circle-progress {
+        transition: stroke-dashoffset 0.35s;
+        transform: rotate(-90deg);
+        transform-origin: 50% 50%;
     }
-    .circle-chart__circle-progress {
-        animation: circle-chart-fill 2s reverse; /* 1 */ 
-    }
-
-    .circle-chart__info {
-        animation: circle-chart-appear 2s forwards;
+    .circle-info {
+        animation: circle-info-appear 2s forwards;
         opacity: 0;
         transform: translateY(0.3em);
     }
 
-    @keyframes circle-chart-fill {
-        to { stroke-dasharray: 0 100; }
-    }
-
-    @keyframes circle-chart-appear {
+    @keyframes circle-info-appear {
         to {
             opacity: 1;
             transform: translateY(0);
