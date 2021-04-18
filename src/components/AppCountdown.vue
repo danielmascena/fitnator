@@ -105,23 +105,14 @@ export default {
         }
     },
     watch: {
-        isPaused: function (value) {
+        isPaused (value) {
             if (value) {
                 this.removeCount();
             }
         },
-        countdown: function(value, oldValue) {
-
-            if (oldValue <= 6) {
-                if (value === 0) {
-                    setTimeout(() => {
-                        this.removeCount();
-                        this.$emit('finish');
-                    }, 500);
-                    return;
-                } else {
-                    this.speak(value);
-                }
+        countdown (value) {
+            if (value <= 5 && value >= 0) {
+                this.speak(value);
             }
         }
     },
@@ -138,8 +129,13 @@ export default {
     },
     methods: {
         startCount() {
-            this.intervalCountdown = setInterval(() => 
-                this.countdown -= 1
+            this.intervalCountdown = setInterval(() => {
+                this.countdown -= 1;
+                if (this.countdown < 0) {
+                    this.removeCount();
+                    this.$emit('finish');
+                }
+            }
             , 1000);
 
             this.intervalProgress = setInterval(() => 
@@ -161,11 +157,10 @@ export default {
             this.isPaused = !this.isPaused;
         },
         speak(txt) {
-            const voices = this.synth.getVoices();
             const utterThis = new SpeechSynthesisUtterance(txt);
-            utterThis.voice = voices[0];
+            utterThis.voice = this.voices[this.speakerIndex];
             utterThis.pitch = 1;
-            utterThis.rate = 1;
+            utterThis.rate = 1.3;
             this.synth.speak(utterThis);
         },
     },
@@ -174,6 +169,8 @@ export default {
             this.startCount();
         }
         this.synth = window.speechSynthesis;
+        this.voices = this.synth.getVoices();
+        this.speakerIndex = this.voices.findIndex(({lang, name}) => name === 'Alex' && lang === "en-US");
     },
     unmounted() {
         this.removeCount()

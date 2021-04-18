@@ -2,18 +2,22 @@
     <section :class="$style.container">
         <h1>Workout</h1>
         <div @click="toggleMusic()">
-            <span v-if="musicOn">
+            <span v-show="musicOn">
                 <AppIconMusicOff />
             </span>
-            <span v-else><AppIconMusicOn /></span>
+            <span v-show="!musicOn">
+                <AppIconMusicOn />
+            </span>
+            <ul style="padding: 0; list-style-type: none; position: fixed;">
+                <li v-for="(track, index) of setList" :key="'XTaKeRuX' + index">
+                    <AppMusic v-if="soundtrack === index" :musicPath="track" :shouldPlay="musicOn" />
+                </li>
+            </ul>
         </div>
+        <button @click="switchMusic()">Change Music</button>
         <AppButton />
         <SetContainer :workout="initialData" />
-        <audio ref="audio">
-            <source 
-                :src="soundtrack" 
-                type="audio/mpeg" />
-        </audio>
+        
     </section>
 </template>
 
@@ -22,8 +26,10 @@ import SetContainer from './SetContainer';
 import AppButton from './AppButton';
 import AppIconMusicOn from './AppIconMusicOn';
 import AppIconMusicOff from './AppIconMusicOff';
+import AppMusic from './AppMusic';
 
 import data from '../data.json';
+
 
 export default {
     name: "CircuitTimer",
@@ -31,7 +37,8 @@ export default {
         SetContainer,
         AppButton,
         AppIconMusicOn,
-        AppIconMusicOff
+        AppIconMusicOff,
+        AppMusic
     },
     props: {
         autoplay: {
@@ -40,8 +47,15 @@ export default {
         }
     },
     data() {
-        return {
-            soundtrack: '/assets/soundtrack/XTaKeRuX-Shinigami.mp3',
+        const pathToMusic = '/assets/soundtrack/';
+
+        return {            
+            setList : [
+                pathToMusic + '/XTaKeRuX-Shinigami.mp3',
+                pathToMusic + '/XTaKeRuX-White_Crow.mp3',    
+                pathToMusic + '/XTaKeRuX-Beast_but_not_Least.mp3',
+            ],
+            soundtrack: 0,
             musicOn: this.autoplay,
             initialData: data
         }
@@ -50,36 +64,22 @@ export default {
         toggleMusic() {
             this.musicOn = !this.musicOn;
         },
-        playMusic() {
-            this.$refs['audio'].play();
-        },
-        pauseMusic() {
-            this.$refs['audio'].pause(); 
+        switchMusic() {
+            let next = this.soundtrack + 1;
+            if (next >= this.setList.length) {
+                next = 0;
+            }
+            this.soundtrack = next;
         }
     },
-    watch: {
-        musicOn: function(value) {
-            if (!value){
-                this.pauseMusic();
-            }
-            if (value){
-                this.playMusic();
-            }
-        }
-    },
-    mounted() {
-        if (this.autoplay) {
-            this.playMusic();
-        }
-        console.log('%cData: ', 'font-size: 200%;color: green', data);
-    }
 }
 </script>
 
 <style module>
 .container :global {
-    background-color: #000;
     --ion-text-color: yellow;
+    background-color: #000;
     height: 100%;
 }
+
 </style>
