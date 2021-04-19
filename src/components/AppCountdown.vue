@@ -99,7 +99,7 @@ export default {
             isPaused: this.paused,
             dashArrayValue: 0,
             progress: 0,
-            tenPercentage: this.time / 10,
+            tenPercentage: this.time / 100,
             normalizedRadius,
             circumference
         }
@@ -131,7 +131,7 @@ export default {
         startCount() {
             this.intervalCountdown = setInterval(() => {
                 this.countdown -= 1;
-                if (this.countdown < 0) {
+                if (this.countdown === 0) {
                     this.removeCount();
                     this.$emit('finish');
                 }
@@ -139,7 +139,7 @@ export default {
             , 1000);
 
             this.intervalProgress = setInterval(() => 
-                this.progress += 10
+                this.progress += 1
             , this.tenPercentage * 1000);
         },
         removeCount() {
