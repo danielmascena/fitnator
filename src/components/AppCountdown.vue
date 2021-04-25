@@ -113,6 +113,8 @@ export default {
         countdown (value) {
             if (value <= 5 && value >= 0) {
                 this.speak(value);
+            } else if (value === 7) {
+                this.$emit('ending');
             }
         }
     },
@@ -137,9 +139,7 @@ export default {
                 }
             }
             , 1000);
-
-            this.intervalProgress = setInterval(() => 
-                this.progress += 1
+            this.intervalProgress = setInterval(() => this.progress += 1
             , this.tenPercentage * 1000);
         },
         removeCount() {

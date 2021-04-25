@@ -6,7 +6,8 @@
                 :exercise="work" 
                 :display="isActive(index)"
                 @finish="goToNext()" 
-                v-show="isActive(index)" 
+                v-show="isActive(index)"
+                :generator="iterator"
             />
     </section>
 </template>
@@ -26,12 +27,11 @@ export default {
             validator: function(items) {
                 return items.every(item => item instanceof Round);
             }
-        }
+        },
     },
     data() {
         return {
             position: 0,
-            iterator: this.workout.values()
         }
     },
     methods: {
@@ -41,6 +41,9 @@ export default {
         isActive(index) {
             return index === this.position;
         }
+    },
+    created() {
+            this.iterator = this.workout.values();
     }
 };
 </script>

@@ -19,33 +19,44 @@
                     :time="exercise.rest" 
                     :paused="!isCurrentRound(round)" 
                     @finish="restFinished()" 
+                    @ending="showNext()"
                 />
+                <AppPreview v-show="shouldDisplayPreview" :exercise="next" />
         </section>
     </article>
 </template>
 
 <script>
 import AppCountdown from './AppCountdown';
+import AppPreview from './AppPreview';
+
 import Round from '../Round';
 
 export default {
     name: 'RoundTimer',
     components: {
-        AppCountdown
+        AppCountdown,
+        AppPreview,
     },
     props: {
         exercise: {
             type: Round,
-            required: true
+            required: true,
         },
-        display: {
-            type: Boolean
-        }
+        display: Boolean,
+        generator: {
+            type: Object,
+            validator: function (value) {
+                return Object.prototype.toString.call(value) === '[object Array Iterator]';
+            }
+        },
     },
     data() {
         return {
             isActionCounting: true,
-            position: 1
+            position: 1,
+            shouldDisplayPreview: false,
+            next: {}
         }
     },
     watch: {
@@ -57,20 +68,26 @@ export default {
         }
     },
     methods: {
-        actionFinished(){
+        actionFinished() {
             this.isActionCounting = false;
         },
-        restFinished(){
+        restFinished() {
             console.log('%crest finished', 'color: blue; font-size: 150%');
             this.position += 1;
             this.isActionCounting = true;
         },
-        isCurrentRound(round){
+        isCurrentRound(round) {
             return round === this.position;
+        },
+        showNext() {
+            console.log('showing next');
+            this.next = this.generator.next().value;
+            this.shouldDisplayPreview = true;
+            const timerId = setTimeout(function() {
+                this.shouldDisplayPreview = false;
+                clearTimeout(timerId);
+            }, 5000);
         }
-    },
-    created() {
-        console.log('AppRound: ', this.exercise);
     },
     updated: function () {
         this.$nextTick(function () {
