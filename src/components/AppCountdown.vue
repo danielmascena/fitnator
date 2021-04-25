@@ -63,13 +63,19 @@
             class="action-btn">
                 {{countStatus}}
         </button>
+
+        <AppPreview v-show="shouldDisplayPreview" :exercise="next" />
     </section>
 </template>
 
 <script>
+import AppPreview from './AppPreview';
 
 export default {
     name: "AppCountdown",
+    components: {
+        AppPreview,
+    },
     props: {
         time: {
             type: Number,
@@ -89,6 +95,11 @@ export default {
             default: false
         },
         isLayDown: Boolean,
+        hasPreview: Boolean,
+        next: {
+            type: Object,
+            default: new Object(),
+        }
     },
     data() {
         const normalizedRadius = this.radius - this.stroke * 2;
@@ -101,7 +112,8 @@ export default {
             progress: 0,
             tenPercentage: this.time / 100,
             normalizedRadius,
-            circumference
+            circumference,
+            shouldDisplayPreview: false,
         }
     },
     watch: {
@@ -113,8 +125,9 @@ export default {
         countdown (value) {
             if (value <= 5 && value >= 0) {
                 this.speak(value);
-            } else if (value === 7) {
+            } else if (value === 7 && this.hasPreview) {
                 this.$emit('ending');
+                this.shouldDisplayPreview = true;
             }
         }
     },

@@ -19,16 +19,15 @@
                     :time="exercise.rest" 
                     :paused="!isCurrentRound(round)" 
                     @finish="restFinished()" 
-                    @ending="showNext()"
+                    :hasPreview="true"
+                    :next="getNext"
                 />
-                <AppPreview v-show="shouldDisplayPreview" :exercise="next" />
         </section>
     </article>
 </template>
 
 <script>
 import AppCountdown from './AppCountdown';
-import AppPreview from './AppPreview';
 
 import Round from '../Round';
 
@@ -36,7 +35,6 @@ export default {
     name: 'RoundTimer',
     components: {
         AppCountdown,
-        AppPreview,
     },
     props: {
         exercise: {
@@ -81,12 +79,11 @@ export default {
         },
         showNext() {
             console.log('showing next');
-            this.next = this.generator.next().value;
-            this.shouldDisplayPreview = true;
-            const timerId = setTimeout(function() {
-                this.shouldDisplayPreview = false;
-                clearTimeout(timerId);
-            }, 5000);
+        }
+    },
+    computed: {
+        getNext() {
+            return this.generator.next().value;
         }
     },
     updated: function () {
