@@ -28,6 +28,12 @@ export default {
                 return items.every(item => item instanceof Round);
             }
         },
+        iterator: {
+            type: Object,
+            validator: function (value) {
+                return Object.prototype.toString.call(value) === '[object Array Iterator]';
+            }
+        }
     },
     data() {
         return {
@@ -41,9 +47,6 @@ export default {
         isActive(index) {
             return index === this.position;
         }
-    },
-    created() {
-            this.iterator = this.workout.values();
     }
 };
 </script>

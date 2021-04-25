@@ -20,7 +20,9 @@
                     :paused="!isCurrentRound(round)" 
                     @finish="restFinished()" 
                     :hasPreview="true"
-                    :next="getNext"
+                    :next="round < exercise.times 
+                        ? ({name: exercise.name, work: exercise.work}) 
+                        : getNext"
                 />
         </section>
     </article>

@@ -123,10 +123,9 @@ export default {
             }
         },
         countdown (value) {
-            if (value <= 5 && value >= 0) {
+            if (value <= 5 && value > 0) {
                 this.speak(value);
             } else if (value === 7 && this.hasPreview) {
-                this.$emit('ending');
                 this.shouldDisplayPreview = true;
             }
         }
