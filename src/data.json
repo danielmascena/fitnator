@@ -1,14 +1,33 @@
-[
-	{
-		"name": "push-ups",
-		"work": 30,
-		"rest": 15,
-		"times": 2
-	},
-	{
-		"name": "Jumping Jacks",
-		"work": 60,
-		"rest": 30,
-		"times": 1
-	}
-]
+{
+	"Jupiter": [
+		{
+			"name": "push-ups",
+			"work": 30,
+			"rest": 15,
+			"times": 2
+		},
+		{
+			"name": "Jumping Jacks",
+			"work": 60,
+			"rest": 30,
+			"times": 1
+		}
+	],
+	"Neptune": [],
+	"Saturn": [],
+	"Pluto": [],
+	"Vulcan": [],
+	"Apollo": [],
+	"Minerva": [],
+	"Diana": [],
+	"Mars": [],
+	"Mercury": [],
+	"Uranus": [],
+	"Victoria": [],
+	"Aurora": [],
+	"Sol": [],
+	"Hercules": [],
+	"Ulysses": [],
+	"Luna": []
+}
+

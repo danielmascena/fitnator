@@ -12,7 +12,7 @@
         </ion-toolbar>
       </ion-header>
     
-      <CircuitTimer name="WOD page" />
+      <CircuitTimer name="Jupiter" />
     </ion-content>
   </ion-page>
 </template>

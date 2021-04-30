@@ -44,7 +44,8 @@ export default {
         autoplay: {
             type: Boolean,
             default: false
-        }
+        },
+        name: String
     },
     data() {
         const pathToMusic = '/assets/soundtrack/';
@@ -57,7 +58,7 @@ export default {
             ],
             soundtrack: 0,
             musicOn: this.autoplay,
-            initialData: data
+            initialData: data[this.name]
         }
     },
     methods: {
