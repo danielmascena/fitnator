@@ -11,7 +11,7 @@
           <ion-title size="large">Workout List</ion-title>
         </ion-toolbar>
       </ion-header>
-
+      <ion-searchbar show-cancel-button="focus"></ion-searchbar>
       <ion-list>
         <ion-list-header>
           Olimpo armor

@@ -1,6 +1,6 @@
 <template>
     <section :class="$style.container">
-        <h1>Workout</h1>
+        <h1>{{name}} Workout</h1>
         <div @click="toggleMusic()">
             <span v-show="musicOn">
                 <AppIconMusicOff />
@@ -80,7 +80,13 @@ export default {
 .container :global {
     --ion-text-color: yellow;
     background-color: #000;
-    height: 100%;
+    /* height: 100vh; */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    border: 0;
+    z-index: 10;
 }
 
 </style>
