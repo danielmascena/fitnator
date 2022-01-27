@@ -1,1 +1,1 @@
-# zest-app
+# fitnator-app
